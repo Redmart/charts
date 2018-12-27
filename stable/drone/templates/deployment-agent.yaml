@@ -116,7 +116,13 @@ spec:
         volumeMounts:
           - name: docker-graph-storage
             mountPath: /var/lib/docker
+{{- with .Values.dind.extraVolumeMounts }}
+{{ tpl . $ | indent 10 }}
+{{- end }}
       volumes:
       - name: docker-graph-storage
         emptyDir: {}
+{{- with .Values.agent.extraVolumes }}
+{{ tpl . $ | indent 6 }}
+{{- end }}
 {{- end }}
