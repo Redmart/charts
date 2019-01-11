@@ -1,0 +1,10 @@
+pipeline:
+
+  publish_charts:
+    image: docker-registry.infra.redmart.com/devops/drone-helm-push:0.2.0-SNAPSHOT
+    charts:
+    - stable/drone
+    helm_repo: https://charts.infra.redmart.com
+    when:
+      branch: [feature/publish-charts-ci] #Change before merge
+      event: push
