@@ -5,7 +5,6 @@ pipeline:
     pull: true
     charts:
     - stable/drone
-    - pepe
     helm_repo: https://charts.infra.redmart.com
     when:
       branch: [feature/publish-charts-ci] #Change before merge
