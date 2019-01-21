@@ -12,7 +12,7 @@ elasticsearch:
   master:
     exposeHttp: true
     replicas: 2
-    heapSize: "2Gi"
+    heapSize: "2000m"
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
@@ -39,7 +39,7 @@ elasticsearch:
   data:
     exposeHttp: true
     replicas: 2
-    heapSize: "4Gi"
+    heapSize: "2000m"
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
@@ -61,7 +61,7 @@ elasticsearch:
 
   client:
     replicas: 2
-    heapSize: "4Gi"
+    heapSize: "4000m"
     antiAffinity: "soft"
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
     resources:
