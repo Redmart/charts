@@ -1,24 +1,117 @@
-# Default values for elk.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 kibana:
   env:
     ELASTICSEARCH_URL: http://http.default.svc.cluster.local:9200
+  ingress:
+    enabled: true
+    hosts:
+      - elk-k8s.alpha.redmart.com
+      
+    annotations:
+      kubernetes.io/ingress.class: "internal-nginx"
+elasticsearch:
+  master:
+    exposeHttp: true
+    replicas: 2
+    heapSize: "2Gi"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      name: data
+      size: "4Gi"
+      storageClass: "rm-local-persistence-disks"
+    antiAffinity: "soft"
+    nodeAffinity: {}
+    nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
+    tolerations: []
+    resources:
+      limits:
+        cpu: "1.5"
+        memory: "8Gi"
+      requests:
+        cpu: "1"
+        memory: "7Gi"
+    priorityClassName: ""
+    podAnnotations:
+      unit-name: "elk-data-node"
+    updateStrategy:
+      type: OnDelete
+
+  data:
+    exposeHttp: true
+    replicas: 2
+    heapSize: "4Gi"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      name: data
+      size: "100Gi"
+      storageClass: "rm-local-persistence-disks"
+    antiAffinity: "soft"
+    nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
+    priorityClassName: ""
+    podAnnotations:
+      unit-name: "elk-data-node"
+    resources:
+      limits:
+        cpu: "1.5"
+        memory: "8Gi"
+      requests:
+        cpu: "1"
+        memory: "7Gi"
+
+  client:
+    replicas: 2
+    heapSize: "4Gi"
+    antiAffinity: "soft"
+    nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
+    resources:
+      limits:
+        cpu: "1.5"
+        memory: "4Gi"
+      requests:
+        cpu: "1"
+        memory: "4Gi"
+    priorityClassName: ""
+    podAnnotations:
+      unit-name: "elk-data-node"
+    podDisruptionBudget:
+      enabled: false
+      minAvailable: 1
+    ingress:
+      enabled: true
+      annotations: 
+        kubernetes.io/ingress.class: "internal-nginx"
+      path: /
+      hosts:
+        - es-k8s.alpha.redmart.com
 
 logstash:
   enabled: true
-  # elasticsearch:
-  #   host: elastic-stack-elasticsearch-client
+  replicaCount: 2
+  resources:
+        limits:
+          cpu: "1.5"
+          memory: "8Gi"
+        requests:
+          cpu: "1"
+          memory: "7Gi"
+  nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
+  podAnnotations:
+       unit-name: "elk-data-node"
+  podLabels: 
+       elk-service: "elk-logstash"
+  persistence:
+    enabled: true
+    storageClass: "rm-local-persistence-disks"
+    accessMode: ReadWriteOnce
+    size: 30Gi
+  podDisruptionBudget:
+   maxUnavailable: 1
+  elasticsearch:
+    host: elastic-stack-elasticsearch-client
 
 filebeat:
   enabled: false
-  # config:
-  #   output.file.enabled: false
-  #   output.logstash:
-  #     hosts: ["elastic-stack-logstash:5044"]
-  # indexTemplateLoad:
-  #   - elastic-stack-elasticsearch-client:9200
 
 fluentd:
   enabled: false
@@ -31,31 +124,7 @@ fluentd-elasticsearch:
 
 nginx-ldapauth-proxy:
   enabled: false
-  # Example config to get it working with ELK. Adjust as you need to.
-  # proxy:
-  #   port: 5601
-  #   # This is the internal hostname for the kibana service
-  #   host: "elk-kibana.default.svc.cluster.local"
-  #   authName: "ELK:Infrastructure:LDAP"
-  #   ldapHost: "ldap.example.com"
-  #   ldapDN: "dc=example,dc=com"
-  #   ldapFilter: "objectClass=organizationalPerson"
-  #   ldapBindDN: "cn=reader,dc=example,dc=com"
-  #   requires:
-  #     - name: "ELK-USER"
-  #       filter: "cn=elkuser,ou=groups,dc=example,dc=com"
-  # ingress:
-  #   enabled: true
-  #   hosts:
-  #     - "elk.example.com"
-  #   annotations:
-  #     kubernetes.io/ingress.class: nginx
-  #   tls:
-  #     - hosts:
-  #       - elk.example.com
-  #       secretName: example-elk-tls
-  # secrets:
-  #   ldapBindPassword: PASSWORD
+
 elasticsearch-curator:
   enabled: false
 
