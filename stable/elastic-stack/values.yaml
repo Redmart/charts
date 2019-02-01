@@ -1,6 +1,6 @@
 kibana:
   env:
-    ELASTICSEARCH_URL: http://http.default.svc.cluster.local:9200
+    ELASTICSEARCH_URL: http://elk.svc.cluster.local:9200
   ingress:
     enabled: true
     hosts:
@@ -11,13 +11,13 @@ kibana:
 elasticsearch:
   master:
     exposeHttp: true
-    replicas: 2
+    replicas: 3
     heapSize: "2000m"
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
       name: data
-      size: "20Gi"
+      size: "18Gi"
       storageClass: "infra-elk-elasticsearch-master"
     antiAffinity: "soft"
     nodeAffinity: {}
@@ -25,11 +25,11 @@ elasticsearch:
     tolerations: []
     resources:
       limits:
-        cpu: "1.5"
-        memory: "8Gi"
-      requests:
         cpu: "1"
-        memory: "7Gi"
+        memory: "3Gi"
+      requests:
+        cpu: "0.5"
+        memory: "3Gi"
     priorityClassName: ""
     podAnnotations:
       unit-name: "elk-data-node"
@@ -38,13 +38,13 @@ elasticsearch:
 
   data:
     exposeHttp: true
-    replicas: 2
+    replicas: 3
     heapSize: "2000m"
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
       name: data
-      size: "100Gi"
+      size: "90Gi"
       storageClass: "rm-local-persistence-disks"
     antiAffinity: "soft"
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
@@ -53,24 +53,24 @@ elasticsearch:
       unit-name: "elk-data-node"
     resources:
       limits:
-        cpu: "1.5"
-        memory: "8Gi"
-      requests:
         cpu: "1"
-        memory: "7Gi"
+        memory: "6Gi"
+      requests:
+        cpu: "0.5"
+        memory: "5Gi"
 
   client:
-    replicas: 2
-    heapSize: "4000m"
+    replicas: 1
+    heapSize: "1000m"
     antiAffinity: "soft"
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
     resources:
       limits:
-        cpu: "1.5"
-        memory: "4Gi"
-      requests:
         cpu: "1"
-        memory: "4Gi"
+        memory: "3Gi"
+      requests:
+        cpu: "0.5"
+        memory: "2Gi"
     priorityClassName: ""
     podAnnotations:
       unit-name: "elk-data-node"
@@ -86,7 +86,7 @@ elasticsearch:
         - es-k8s.alpha.redmart.com
 
 logstash:
-  enabled: true
+  enabled: false
   replicaCount: 2
   resources:
         limits:
