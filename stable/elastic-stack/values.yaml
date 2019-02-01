@@ -4,7 +4,7 @@ kibana:
   ingress:
     enabled: true
     hosts:
-      - elk-k8s.alpha.redmart.com
+      - logs-infra.infra.redmart.com
       
     annotations:
       kubernetes.io/ingress.class: "internal-nginx"
@@ -17,8 +17,8 @@ elasticsearch:
       enabled: true
       accessMode: ReadWriteOnce
       name: data
-      size: "4Gi"
-      storageClass: "rm-local-persistence-disks"
+      size: "20Gi"
+      storageClass: "infra-elk-elasticsearch-master"
     antiAffinity: "soft"
     nodeAffinity: {}
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
