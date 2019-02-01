@@ -26,10 +26,10 @@ elasticsearch:
     resources:
       limits:
         cpu: "1"
-        memory: "3Gi"
+        memory: "2.5Gi"
       requests:
         cpu: "0.5"
-        memory: "3Gi"
+        memory: "2Gi"
     priorityClassName: ""
     podAnnotations:
       unit-name: "elk-data-node"
@@ -60,17 +60,17 @@ elasticsearch:
         memory: "5Gi"
 
   client:
-    replicas: 1
+    replicas: 3
     heapSize: "1000m"
     antiAffinity: "soft"
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
     resources:
       limits:
         cpu: "1"
-        memory: "3Gi"
+        memory: "2Gi"
       requests:
         cpu: "0.5"
-        memory: "2Gi"
+        memory: "1.5Gi"
     priorityClassName: ""
     podAnnotations:
       unit-name: "elk-data-node"
