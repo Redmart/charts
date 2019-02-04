@@ -1,6 +1,6 @@
 kibana:
   env:
-    ELASTICSEARCH_URL: http://elk.svc.cluster.local:9200
+    ELASTICSEARCH_URL: http://elk-infra.svc.cluster.local:9200
   ingress:
     enabled: true
     hosts:
@@ -19,7 +19,7 @@ elasticsearch:
       name: data
       size: "18Gi"
       storageClass: "infra-elk-elasticsearch-master"
-    antiAffinity: "soft"
+    antiAffinity: "hard"
     nodeAffinity: {}
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
     tolerations: []
@@ -62,7 +62,7 @@ elasticsearch:
   client:
     replicas: 3
     heapSize: "1000m"
-    antiAffinity: "soft"
+    antiAffinity: "hard"
     nodeSelector: {"redmart.com/role":"InfraStack_Elk"}
     resources:
       limits:
