@@ -239,6 +239,7 @@ dind:
   ## additional volume mounts for DinD, e. g. for nfs volume for cache
   ## ex: https://github.com/kubernetes/charts/tree/master/stable/keycloak
   ##
+  extraContainers: |
   extraVolumeMounts: |
   extraVolumes: |
 
