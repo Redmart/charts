@@ -125,6 +125,10 @@ spec:
             - name: NAMESPACE
               value: "{{ .Values.sidecar.dashboards.searchNamespace }}"
             {{- end }}
+            {{- if .Values.sidecar.dashboards.skipTLSVerify }}
+            - name: SKIP_TLS_VERIFY
+              value: "{{ .Values.sidecar.dashboards.skipTLSVerify }}"
+            {{- end }}
           resources:
 {{ toYaml .Values.sidecar.resources | indent 12 }}
           volumeMounts:

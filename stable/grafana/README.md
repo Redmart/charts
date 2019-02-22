@@ -83,6 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecar.datasources.enabled`             | Enabled the cluster wide search for datasources and adds/updates/deletes them in grafana |`false`       |
 | `sidecar.datasources.label`               | Label that config maps with datasources should have to be added | `grafana_datasource`                               |
 | `sidecar.datasources.searchNamespace`     | If specified, the sidecar will search for datasources config-maps inside this namespace. Otherwise the namespace in which the sidecar is running will be used. It's also possible to specify ALL to search in all namespaces | `nil`                               |
+| `sidecar.datasources.skipTLSVerify`       | If set to true, the sidecar will skip tls verification for kube api calls. Otherwise the call will always be verified. It's useful if you have self signed certificate in kube api | `nil`                                |
 | `smtp.existingSecret`                     | The name of an existing secret containing the SMTP credentials. | `""`                                  |
 | `smtp.userKey`                            | The key in the existing SMTP secret containing the username. | `"user"`                                 |
 | `smtp.passwordKey`                        | The key in the existing SMTP secret containing the password. | `"password"`                             |
