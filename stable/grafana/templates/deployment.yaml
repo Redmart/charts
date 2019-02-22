@@ -95,6 +95,10 @@ spec:
             - name: NAMESPACE
               value: "{{ .Values.sidecar.datasources.searchNamespace }}"
             {{- end }}
+            {{- if .Values.sidecar.datasources.skipTLSVerify }}
+            - name: SKIP_TLS_VERIFY
+              value: "{{ .Values.sidecar.datasources.skipTLSVerify }}"
+            {{- end }}
           resources:
 {{ toYaml .Values.sidecar.resources | indent 12 }}
           volumeMounts:
